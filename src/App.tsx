@@ -10,7 +10,11 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
+import Analytics from "./pages/Analytics";
 import Leads from "./pages/Leads";
+import Campaigns from "./pages/Campaigns";
+import Social from "./pages/Social";
+import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +44,17 @@ const App = () => (
             />
             
             <Route
+              path="/analytics"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Analytics />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            
+            <Route
               path="/leads"
               element={
                 <ProtectedRoute>
@@ -50,13 +65,52 @@ const App = () => (
               }
             />
             
-            {/* Placeholder routes for other pages */}
-            <Route path="/analytics" element={<ProtectedRoute><DashboardLayout><div className="text-center py-20"><h1 className="text-2xl font-bold">Веб-аналітика</h1><p className="text-muted-foreground">Coming soon...</p></div></DashboardLayout></ProtectedRoute>} />
-            <Route path="/campaigns" element={<ProtectedRoute><DashboardLayout><div className="text-center py-20"><h1 className="text-2xl font-bold">Email-кампанії</h1><p className="text-muted-foreground">Coming soon...</p></div></DashboardLayout></ProtectedRoute>} />
-            <Route path="/social" element={<ProtectedRoute><DashboardLayout><div className="text-center py-20"><h1 className="text-2xl font-bold">Соцмережі</h1><p className="text-muted-foreground">Coming soon...</p></div></DashboardLayout></ProtectedRoute>} />
-            <Route path="/reports" element={<ProtectedRoute><DashboardLayout><div className="text-center py-20"><h1 className="text-2xl font-bold">Звіти</h1><p className="text-muted-foreground">Coming soon...</p></div></DashboardLayout></ProtectedRoute>} />
-            <Route path="/ai-assistant" element={<ProtectedRoute><DashboardLayout><div className="text-center py-20"><h1 className="text-2xl font-bold">AI-Асистент</h1><p className="text-muted-foreground">Coming soon...</p></div></DashboardLayout></ProtectedRoute>} />
-            <Route path="/settings" element={<ProtectedRoute><DashboardLayout><div className="text-center py-20"><h1 className="text-2xl font-bold">Налаштування</h1><p className="text-muted-foreground">Coming soon...</p></div></DashboardLayout></ProtectedRoute>} />
+            <Route
+              path="/campaigns"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Campaigns />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            
+            <Route
+              path="/social"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Social />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            
+            <Route
+              path="/reports"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Reports />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <div className="text-center py-20">
+                      <h1 className="text-2xl font-bold">Налаштування</h1>
+                      <p className="text-muted-foreground mt-2">Налаштуйте ваш акаунт та платформу</p>
+                    </div>
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
