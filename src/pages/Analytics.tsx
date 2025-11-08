@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Download, TrendingUp, Users, Eye, MousePointer, Clock } from 'lucide-react';
+import { toast } from 'sonner';
 
 const pageViewsData = [
   { date: '01.11', views: 4200, unique: 3100, bounce: 45 },
@@ -38,6 +40,43 @@ const behaviorFlowData = [
 ];
 
 const Analytics = () => {
+  const [period, setPeriod] = useState('30');
+
+  const handleExport = () => {
+    toast.success('Експорт даних розпочато!', {
+      description: 'Файл буде завантажено через кілька секунд',
+    });
+    
+    // Симуляція експорту
+    setTimeout(() => {
+      const data = {
+        period: period === '7' ? 'Останні 7 днів' : period === '30' ? 'Останні 30 днів' : 'Останні 90 днів',
+        metrics: metrics,
+        pageViews: pageViewsData,
+        topPages: topPagesData,
+        exportDate: new Date().toLocaleDateString('uk-UA'),
+      };
+      
+      const dataStr = JSON.stringify(data, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `analytics-export-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      toast.success('Файл успішно завантажено!');
+    }, 1500);
+  };
+
+  const handlePeriodChange = (value: string) => {
+    setPeriod(value);
+    toast.info(`Період змінено на: ${value === '7' ? 'Останні 7 днів' : value === '30' ? 'Останні 30 днів' : 'Останні 90 днів'}`);
+  };
+  
   const metrics = [
     { title: 'Всього переглядів', value: '156,429', change: '+18%', icon: Eye, color: 'primary' },
     { title: 'Унікальні відвідувачі', value: '45,231', change: '+12%', icon: Users, color: 'secondary' },
@@ -53,7 +92,7 @@ const Analytics = () => {
           <p className="text-muted-foreground mt-1">Детальна статистика відвідувачів та поведінки</p>
         </div>
         <div className="flex gap-3">
-          <Select defaultValue="30">
+          <Select value={period} onValueChange={handlePeriodChange}>
             <SelectTrigger className="w-40">
               <SelectValue />
             </SelectTrigger>
@@ -63,7 +102,7 @@ const Analytics = () => {
               <SelectItem value="90">Останні 90 днів</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline">
+          <Button variant="outline" onClick={handleExport}>
             <Download className="w-4 h-4 mr-2" />
             Експорт
           </Button>
