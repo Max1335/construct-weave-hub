@@ -15,6 +15,7 @@ import Leads from "./pages/Leads";
 import Campaigns from "./pages/Campaigns";
 import Social from "./pages/Social";
 import Reports from "./pages/Reports";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -103,10 +104,7 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <DashboardLayout>
-                    <div className="text-center py-20">
-                      <h1 className="text-2xl font-bold">Налаштування</h1>
-                      <p className="text-muted-foreground mt-2">Налаштуйте ваш акаунт та платформу</p>
-                    </div>
+                    <Settings />
                   </DashboardLayout>
                 </ProtectedRoute>
               }

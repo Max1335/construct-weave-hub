@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -40,6 +40,7 @@ const menuItems = [
 export const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const getInitials = (name: string) => {
@@ -118,11 +119,11 @@ export const DashboardLayout = ({ children }: { children: ReactNode }) => {
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>Мій акаунт</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/settings')}>
                   <User className="w-4 h-4 mr-2" />
                   Профіль
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/settings')}>
                   <Settings className="w-4 h-4 mr-2" />
                   Налаштування
                 </DropdownMenuItem>
