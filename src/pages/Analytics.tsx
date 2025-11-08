@@ -16,11 +16,11 @@ const pageViewsData = [
 ];
 
 const topPagesData = [
-  { page: '/home', views: 12458, avgTime: '3:24', bounceRate: 35 },
-  { page: '/products', views: 8932, avgTime: '4:15', bounceRate: 28 },
-  { page: '/about', views: 6421, avgTime: '2:48', bounceRate: 42 },
-  { page: '/blog', views: 5234, avgTime: '5:30', bounceRate: 25 },
-  { page: '/contact', views: 3156, avgTime: '2:10', bounceRate: 55 },
+  { page: 'Головна сторінка', views: 12458, avgTime: '3:24', bounceRate: 35 },
+  { page: 'Каталог продуктів', views: 8932, avgTime: '4:15', bounceRate: 28 },
+  { page: 'Про нас', views: 6421, avgTime: '2:48', bounceRate: 42 },
+  { page: 'Блог', views: 5234, avgTime: '5:30', bounceRate: 25 },
+  { page: 'Контакти', views: 3156, avgTime: '2:10', bounceRate: 55 },
 ];
 
 const deviceData = [
