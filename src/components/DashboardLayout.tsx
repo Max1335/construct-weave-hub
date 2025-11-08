@@ -150,12 +150,6 @@ export const DashboardLayout = ({ children }: { children: ReactNode }) => {
             >
               {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </Button>
-
-            <div className="flex items-center gap-4">
-              <p className="text-sm text-muted-foreground">
-                {user?.companyName && `${user.companyName}`}
-              </p>
-            </div>
           </div>
         </header>
 
