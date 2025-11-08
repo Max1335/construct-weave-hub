@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AddCampaignModal } from '@/components/AddCampaignModal';
+import { CampaignDetailModal } from '@/components/CampaignDetailModal';
 import { 
   Plus, Mail, Send, Users, Eye, MousePointer, TrendingUp, 
   Edit, Trash2, Copy, Play, Pause, MoreVertical 
@@ -91,9 +92,16 @@ const Campaigns = () => {
   const [campaigns, setCampaigns] = useState(initialCampaigns);
   const [activeTab, setActiveTab] = useState('campaigns');
   const [addModalOpen, setAddModalOpen] = useState(false);
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
+  const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
 
   const handleAddCampaign = (newCampaign: any) => {
     setCampaigns([newCampaign, ...campaigns]);
+  };
+
+  const handleOpenDetail = (campaign: any) => {
+    setSelectedCampaign(campaign);
+    setDetailModalOpen(true);
   };
 
   const handleEdit = (campaignId: number) => {
@@ -242,7 +250,11 @@ const Campaigns = () => {
 
         <TabsContent value="campaigns" className="space-y-4">
           {campaigns.map((campaign) => (
-            <Card key={campaign.id} className="hover:shadow-lg transition-all">
+            <Card 
+              key={campaign.id} 
+              className="hover:shadow-lg transition-all cursor-pointer"
+              onClick={() => handleOpenDetail(campaign)}
+            >
               <CardContent className="pt-6">
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                   <div className="flex-1">
@@ -288,7 +300,7 @@ const Campaigns = () => {
                     </div>
                   )}
 
-                  <div className="flex gap-2">
+                  <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
                     {campaign.status === 'scheduled' && (
                       <Button 
                         size="sm" 
@@ -422,6 +434,16 @@ const Campaigns = () => {
         open={addModalOpen}
         onOpenChange={setAddModalOpen}
         onAddCampaign={handleAddCampaign}
+      />
+
+      <CampaignDetailModal
+        campaign={selectedCampaign}
+        open={detailModalOpen}
+        onOpenChange={setDetailModalOpen}
+        onEdit={handleEdit}
+        onDuplicate={handleDuplicate}
+        onDelete={handleDelete}
+        onPauseResume={handlePauseResume}
       />
     </div>
   );
