@@ -4,7 +4,17 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AddCampaignModal } from '@/components/AddCampaignModal';
-import { Plus, Mail, Send, Users, Eye, MousePointer, TrendingUp } from 'lucide-react';
+import { 
+  Plus, Mail, Send, Users, Eye, MousePointer, TrendingUp, 
+  Edit, Trash2, Copy, Play, Pause, MoreVertical 
+} from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
 
 const initialCampaigns = [
@@ -84,6 +94,59 @@ const Campaigns = () => {
 
   const handleAddCampaign = (newCampaign: any) => {
     setCampaigns([newCampaign, ...campaigns]);
+  };
+
+  const handleEdit = (campaignId: number) => {
+    const campaign = campaigns.find(c => c.id === campaignId);
+    toast.info('Редагування кампанії', {
+      description: `Відкривається редактор для "${campaign?.name}"`,
+    });
+  };
+
+  const handleDuplicate = (campaignId: number) => {
+    const campaign = campaigns.find(c => c.id === campaignId);
+    if (campaign) {
+      const duplicated = {
+        ...campaign,
+        id: Date.now(),
+        name: `${campaign.name} (копія)`,
+        status: 'draft',
+        sent: 0,
+        opened: 0,
+        clicked: 0,
+      };
+      setCampaigns([duplicated, ...campaigns]);
+      toast.success('Кампанію продубльовано!', {
+        description: `Створено копію "${campaign.name}"`,
+      });
+    }
+  };
+
+  const handleDelete = (campaignId: number) => {
+    const campaign = campaigns.find(c => c.id === campaignId);
+    setCampaigns(campaigns.filter(c => c.id !== campaignId));
+    toast.success('Кампанію видалено', {
+      description: `"${campaign?.name}" успішно видалено`,
+    });
+  };
+
+  const handlePauseResume = (campaignId: number) => {
+    const campaign = campaigns.find(c => c.id === campaignId);
+    const newStatus = campaign?.status === 'active' ? 'paused' : 'active';
+    setCampaigns(campaigns.map(c => 
+      c.id === campaignId ? { ...c, status: newStatus } : c
+    ));
+    toast.info(
+      newStatus === 'paused' ? 'Кампанію призупинено' : 'Кампанію відновлено',
+      { description: campaign?.name }
+    );
+  };
+
+  const handleSendNow = (campaignId: number) => {
+    const campaign = campaigns.find(c => c.id === campaignId);
+    toast.success('Відправка розпочата!', {
+      description: `Кампанія "${campaign?.name}" відправляється підписникам`,
+    });
   };
 
   const getStatusColor = (status: string) => {
@@ -179,7 +242,7 @@ const Campaigns = () => {
 
         <TabsContent value="campaigns" className="space-y-4">
           {campaigns.map((campaign) => (
-            <Card key={campaign.id} className="hover:shadow-md transition-shadow cursor-pointer">
+            <Card key={campaign.id} className="hover:shadow-lg transition-all">
               <CardContent className="pt-6">
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                   <div className="flex-1">
@@ -193,7 +256,7 @@ const Campaigns = () => {
                     <p className="text-xs text-muted-foreground">Дата: {campaign.date}</p>
                   </div>
 
-                  {campaign.status !== 'scheduled' && (
+                  {campaign.status !== 'scheduled' && campaign.sent > 0 && (
                     <div className="grid grid-cols-3 gap-6 min-w-[400px]">
                       <div className="text-center">
                         <div className="flex items-center justify-center gap-2 mb-1">
@@ -224,6 +287,55 @@ const Campaigns = () => {
                       </div>
                     </div>
                   )}
+
+                  <div className="flex gap-2">
+                    {campaign.status === 'scheduled' && (
+                      <Button 
+                        size="sm" 
+                        onClick={() => handleSendNow(campaign.id)}
+                      >
+                        <Send className="w-4 h-4 mr-2" />
+                        Відправити зараз
+                      </Button>
+                    )}
+                    
+                    {campaign.status === 'active' && (
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => handlePauseResume(campaign.id)}
+                      >
+                        <Pause className="w-4 h-4 mr-2" />
+                        Призупинити
+                      </Button>
+                    )}
+
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button size="sm" variant="outline">
+                          <MoreVertical className="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-48">
+                        <DropdownMenuItem onClick={() => handleEdit(campaign.id)}>
+                          <Edit className="w-4 h-4 mr-2" />
+                          Редагувати
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleDuplicate(campaign.id)}>
+                          <Copy className="w-4 h-4 mr-2" />
+                          Дублювати
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem 
+                          onClick={() => handleDelete(campaign.id)}
+                          className="text-destructive"
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          Видалити
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
               </CardContent>
             </Card>
