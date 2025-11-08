@@ -123,6 +123,10 @@ const Leads = () => {
     setLeads([newLead, ...leads]);
   };
 
+  const handleDeleteLead = (id: number) => {
+    setLeads(leads.filter(lead => lead.id !== id));
+  };
+
   const handleExport = () => {
     toast.success('Експорт лідів розпочато!', {
       description: 'Файл CSV буде завантажено',
@@ -316,6 +320,7 @@ const Leads = () => {
         lead={selectedLead}
         open={modalOpen}
         onOpenChange={setModalOpen}
+        onDelete={handleDeleteLead}
       />
 
       <AddLeadModal

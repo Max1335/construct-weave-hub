@@ -4,7 +4,10 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
 import { Mail, Phone, Building, Calendar, TrendingUp, MessageSquare, Target, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
+import { useState } from 'react';
 
 interface Lead {
   id: number;
@@ -27,9 +30,15 @@ interface LeadDetailModalProps {
   lead: Lead | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onDelete?: (id: number) => void;
 }
 
-export const LeadDetailModal = ({ lead, open, onOpenChange }: LeadDetailModalProps) => {
+export const LeadDetailModal = ({ lead, open, onOpenChange, onDelete }: LeadDetailModalProps) => {
+  const [newNote, setNewNote] = useState('');
+  const [notes, setNotes] = useState([
+    { text: 'Дуже зацікавлений у нашому продукті. Планує зустріч наступного тижня.', date: '05.11.2024', author: 'Іван Петров' }
+  ]);
+  
   if (!lead) return null;
 
   const getInitials = (name: string) => {
@@ -53,6 +62,46 @@ export const LeadDetailModal = ({ lead, open, onOpenChange }: LeadDetailModalPro
       case 'qualified': return 'Кваліфікований';
       case 'converted': return 'Конвертований';
       default: return status;
+    }
+  };
+
+  const handleSendEmail = () => {
+    window.location.href = `mailto:${lead.email}?subject=Зв'язок з ${lead.company}`;
+    toast.success('Email клієнт відкрито');
+  };
+
+  const handleCall = () => {
+    if (lead.phone) {
+      window.location.href = `tel:${lead.phone}`;
+      toast.success('Дзвінок ініційовано');
+    } else {
+      toast.error('Номер телефону не вказано');
+    }
+  };
+
+  const handleCreateDeal = () => {
+    toast.success(`Угоду створено для ${lead.name}`);
+    // В реальному додатку тут буде редірект на сторінку створення угоди
+  };
+
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(lead.id);
+      onOpenChange(false);
+      toast.success(`Лід ${lead.name} видалено`);
+    }
+  };
+
+  const handleAddNote = () => {
+    if (newNote.trim()) {
+      const now = new Date();
+      const formattedDate = `${now.toLocaleDateString('uk-UA')}`;
+      setNotes([
+        { text: newNote, date: formattedDate, author: 'Поточний користувач' },
+        ...notes
+      ]);
+      setNewNote('');
+      toast.success('Нотатку додано');
     }
   };
 
@@ -125,19 +174,19 @@ export const LeadDetailModal = ({ lead, open, onOpenChange }: LeadDetailModalPro
 
           {/* Action Buttons */}
           <div className="flex gap-3">
-            <Button className="flex-1">
+            <Button className="flex-1" onClick={handleSendEmail}>
               <Mail className="w-4 h-4 mr-2" />
               Відправити Email
             </Button>
-            <Button variant="outline" className="flex-1">
+            <Button variant="outline" className="flex-1" onClick={handleCall}>
               <Phone className="w-4 h-4 mr-2" />
               Зателефонувати
             </Button>
-            <Button variant="outline" className="flex-1">
+            <Button variant="outline" className="flex-1" onClick={handleCreateDeal}>
               <Target className="w-4 h-4 mr-2" />
               Створити угоду
             </Button>
-            <Button variant="destructive" size="icon">
+            <Button variant="destructive" size="icon" onClick={handleDelete}>
               <Trash2 className="w-4 h-4" />
             </Button>
           </div>
@@ -248,13 +297,31 @@ export const LeadDetailModal = ({ lead, open, onOpenChange }: LeadDetailModalPro
               <Card>
                 <CardContent className="pt-6">
                   <div className="space-y-4">
-                    <div className="p-4 bg-muted/50 rounded-lg">
-                      <p className="text-sm">Дуже зацікавлений у нашому продукті. Планує зустріч наступного тижня.</p>
-                      <p className="text-xs text-muted-foreground mt-2">05.11.2024 - Менеджер: Іван Петров</p>
+                    {notes.map((note, index) => (
+                      <div key={index} className="p-4 bg-muted/50 rounded-lg">
+                        <p className="text-sm">{note.text}</p>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          {note.date} - Менеджер: {note.author}
+                        </p>
+                      </div>
+                    ))}
+                    
+                    <div className="space-y-2">
+                      <Textarea
+                        placeholder="Додайте нотатку про лід..."
+                        value={newNote}
+                        onChange={(e) => setNewNote(e.target.value)}
+                        rows={3}
+                      />
+                      <Button 
+                        variant="outline" 
+                        className="w-full"
+                        onClick={handleAddNote}
+                        disabled={!newNote.trim()}
+                      >
+                        Додати нотатку
+                      </Button>
                     </div>
-                    <Button variant="outline" className="w-full">
-                      Додати нотатку
-                    </Button>
                   </div>
                 </CardContent>
               </Card>
