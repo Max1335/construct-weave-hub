@@ -42,11 +42,11 @@ const opensByHour = [
 ];
 
 const topLinks = [
-  { url: 'Homepage', clicks: 892, percentage: 26 },
-  { url: 'Product Page', clicks: 765, percentage: 22 },
-  { url: 'Pricing', clicks: 543, percentage: 16 },
-  { url: 'Blog Article', clicks: 421, percentage: 12 },
-  { url: 'Contact', clicks: 234, percentage: 7 },
+  { name: 'Головна сторінка', url: 'https://example.com/', clicks: 892, percentage: 26 },
+  { name: 'Сторінка продукту', url: 'https://example.com/product', clicks: 765, percentage: 22 },
+  { name: 'Ціни та тарифи', url: 'https://example.com/pricing', clicks: 543, percentage: 16 },
+  { name: 'Стаття в блозі', url: 'https://example.com/blog/article', clicks: 421, percentage: 12 },
+  { name: 'Контактна форма', url: 'https://example.com/contact', clicks: 234, percentage: 7 },
 ];
 
 export const CampaignDetailModal = ({ 
@@ -218,27 +218,50 @@ export const CampaignDetailModal = ({
             <TabsContent value="links" className="space-y-4 mt-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Топ посилань за кліками</CardTitle>
+                  <CardTitle>На які посилання клікали найчастіше</CardTitle>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Ці посилання з вашого email отримали найбільше переходів від підписників
+                  </p>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {topLinks.map((link, index) => (
-                      <div key={index} className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <span className="font-medium">{link.url}</span>
-                          <div className="text-right">
-                            <span className="font-semibold">{link.clicks}</span>
-                            <span className="text-sm text-muted-foreground ml-2">({link.percentage}%)</span>
+                      <div key={index} className="space-y-3">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-2xl font-bold text-muted-foreground">#{index + 1}</span>
+                              <h4 className="font-semibold text-base">{link.name}</h4>
+                            </div>
+                            <p className="text-sm text-muted-foreground truncate">{link.url}</p>
+                          </div>
+                          <div className="text-right flex-shrink-0">
+                            <p className="text-2xl font-bold">{link.clicks}</p>
+                            <p className="text-sm text-muted-foreground">кліків</p>
                           </div>
                         </div>
-                        <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-primary rounded-full transition-all"
-                            style={{ width: `${link.percentage * 3}%` }}
-                          />
+                        
+                        <div className="space-y-1">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Частка від усіх кліків:</span>
+                            <span className="font-semibold text-primary">{link.percentage}%</span>
+                          </div>
+                          <div className="h-3 bg-muted rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all duration-500"
+                              style={{ width: `${link.percentage * 3}%` }}
+                            />
+                          </div>
                         </div>
                       </div>
                     ))}
+                  </div>
+                  
+                  <div className="mt-6 p-4 bg-muted/50 rounded-lg">
+                    <p className="text-sm text-muted-foreground">
+                      💡 <strong>Порада:</strong> Найпопулярніші посилання показують, що найбільше цікавить вашу аудиторію. 
+                      Використовуйте цю інформацію для планування майбутніх кампаній.
+                    </p>
                   </div>
                 </CardContent>
               </Card>
