@@ -3,9 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AddCampaignModal } from '@/components/AddCampaignModal';
 import { Plus, Mail, Send, Users, Eye, MousePointer, TrendingUp } from 'lucide-react';
+import { toast } from 'sonner';
 
-const campaigns = [
+const initialCampaigns = [
   {
     id: 1,
     name: 'Літня промо-акція 2024',
@@ -76,7 +78,13 @@ const templates = [
 ];
 
 const Campaigns = () => {
+  const [campaigns, setCampaigns] = useState(initialCampaigns);
   const [activeTab, setActiveTab] = useState('campaigns');
+  const [addModalOpen, setAddModalOpen] = useState(false);
+
+  const handleAddCampaign = (newCampaign: any) => {
+    setCampaigns([newCampaign, ...campaigns]);
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -109,7 +117,7 @@ const Campaigns = () => {
           <h1 className="text-3xl font-bold">Email-кампанії</h1>
           <p className="text-muted-foreground mt-1">Створюйте та керуйте email розсилками</p>
         </div>
-        <Button>
+        <Button onClick={() => setAddModalOpen(true)}>
           <Plus className="w-4 h-4 mr-2" />
           Нова кампанія
         </Button>
@@ -297,6 +305,12 @@ const Campaigns = () => {
           </div>
         </TabsContent>
       </Tabs>
+
+      <AddCampaignModal
+        open={addModalOpen}
+        onOpenChange={setAddModalOpen}
+        onAddCampaign={handleAddCampaign}
+      />
     </div>
   );
 };
