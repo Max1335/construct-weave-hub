@@ -6,7 +6,9 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LeadDetailModal } from '@/components/LeadDetailModal';
+import { AddLeadModal } from '@/components/AddLeadModal';
 import { Search, Plus, Filter, Download } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface Lead {
   id: number;
@@ -109,11 +111,44 @@ const mockLeads: Lead[] = [
 ];
 
 const Leads = () => {
+  const [leads, setLeads] = useState<Lead[]>(mockLeads);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [sourceFilter, setSourceFilter] = useState('all');
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [addModalOpen, setAddModalOpen] = useState(false);
+
+  const handleAddLead = (newLead: Lead) => {
+    setLeads([newLead, ...leads]);
+  };
+
+  const handleExport = () => {
+    toast.success('Експорт лідів розпочато!', {
+      description: 'Файл CSV буде завантажено',
+    });
+    
+    setTimeout(() => {
+      const csvContent = [
+        ['Ім\'я', 'Email', 'Телефон', 'Компанія', 'Статус', 'Score', 'Джерело'].join(','),
+        ...filteredLeads.map(lead => 
+          [lead.name, lead.email, lead.phone || '', lead.company, lead.status, lead.score, lead.source].join(',')
+        )
+      ].join('\n');
+      
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `leads-export-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      toast.success('Файл успішно завантажено!');
+    }, 1000);
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -156,7 +191,7 @@ const Leads = () => {
     setModalOpen(true);
   };
 
-  const filteredLeads = mockLeads.filter(lead => {
+  const filteredLeads = leads.filter(lead => {
     const matchesSearch = lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          lead.company.toLowerCase().includes(searchQuery.toLowerCase());
@@ -173,11 +208,11 @@ const Leads = () => {
           <p className="text-muted-foreground mt-1">Управління вашою базою лідів • {filteredLeads.length} лідів</p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline">
+          <Button variant="outline" onClick={handleExport}>
             <Download className="w-4 h-4 mr-2" />
             Експорт
           </Button>
-          <Button>
+          <Button onClick={() => setAddModalOpen(true)}>
             <Plus className="w-4 h-4 mr-2" />
             Додати ліда
           </Button>
@@ -281,6 +316,12 @@ const Leads = () => {
         lead={selectedLead}
         open={modalOpen}
         onOpenChange={setModalOpen}
+      />
+
+      <AddLeadModal
+        open={addModalOpen}
+        onOpenChange={setAddModalOpen}
+        onAddLead={handleAddLead}
       />
     </div>
   );
