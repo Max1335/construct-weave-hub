@@ -24,6 +24,7 @@ import {
   Menu,
   X,
   Home,
+  Brain,
 } from 'lucide-react';
 
 const menuItems = [
@@ -62,11 +63,11 @@ export const DashboardLayout = ({ children }: { children: ReactNode }) => {
           <div className="p-6 border-b border-sidebar-border">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0">
-                <BarChart3 className="w-6 h-6 text-white" />
+                <Brain className="w-6 h-6 text-white" />
               </div>
               {sidebarOpen && (
                 <div>
-                  <h2 className="font-bold text-lg">MarketPro</h2>
+                  <h2 className="font-bold text-lg">DecisionLab</h2>
                   <p className="text-xs text-sidebar-foreground/60">Analytics Platform</p>
                 </div>
               )}
