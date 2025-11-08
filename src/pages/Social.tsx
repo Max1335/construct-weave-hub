@@ -1,8 +1,9 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { AddSocialPostModal } from '@/components/AddSocialPostModal';
 import { Facebook, Instagram, Twitter, Linkedin, Plus, TrendingUp, Heart, MessageCircle, Share2, Eye } from 'lucide-react';
 
 const socialAccounts = [
@@ -12,10 +13,10 @@ const socialAccounts = [
   { platform: 'LinkedIn', followers: 3156, engagement: 5.4, icon: Linkedin, color: 'text-[#0A66C2]' },
 ];
 
-const recentPosts = [
+const initialRecentPosts = [
   {
     id: 1,
-    platform: 'Instagram',
+    platform: 'instagram',
     content: 'Наша нова колекція вже доступна! 🎉',
     date: '07.11.2024 14:30',
     likes: 423,
@@ -26,7 +27,7 @@ const recentPosts = [
   },
   {
     id: 2,
-    platform: 'Facebook',
+    platform: 'facebook',
     content: 'Дякуємо за підтримку! Ми досягли 10к підписників 🙌',
     date: '06.11.2024 10:15',
     likes: 892,
@@ -37,7 +38,7 @@ const recentPosts = [
   },
   {
     id: 3,
-    platform: 'LinkedIn',
+    platform: 'linkedin',
     content: 'Ми шукаємо таланти! Приєднуйтесь до нашої команди',
     date: '05.11.2024 16:45',
     likes: 234,
@@ -66,13 +67,21 @@ const scheduledPosts = [
 ];
 
 const Social = () => {
+  const [recentPosts, setRecentPosts] = useState(initialRecentPosts);
+  const [addPostModalOpen, setAddPostModalOpen] = useState(false);
+
+  const handleAddPost = (newPost: any) => {
+    setRecentPosts([newPost, ...recentPosts]);
+  };
   const getPlatformIcon = (platform: string) => {
-    const account = socialAccounts.find(a => a.platform === platform);
+    const platformLower = platform.toLowerCase();
+    const account = socialAccounts.find(a => a.platform.toLowerCase() === platformLower);
     return account ? account.icon : Share2;
   };
 
   const getPlatformColor = (platform: string) => {
-    const account = socialAccounts.find(a => a.platform === platform);
+    const platformLower = platform.toLowerCase();
+    const account = socialAccounts.find(a => a.platform.toLowerCase() === platformLower);
     return account ? account.color : 'text-muted-foreground';
   };
 
@@ -83,7 +92,7 @@ const Social = () => {
           <h1 className="text-3xl font-bold">Соціальні мережі</h1>
           <p className="text-muted-foreground mt-1">Управління всіма вашими соціальними акаунтами</p>
         </div>
-        <Button>
+        <Button onClick={() => setAddPostModalOpen(true)}>
           <Plus className="w-4 h-4 mr-2" />
           Новий пост
         </Button>
@@ -275,6 +284,12 @@ const Social = () => {
           </div>
         </TabsContent>
       </Tabs>
+
+      <AddSocialPostModal
+        open={addPostModalOpen}
+        onOpenChange={setAddPostModalOpen}
+        onAddPost={handleAddPost}
+      />
     </div>
   );
 };
