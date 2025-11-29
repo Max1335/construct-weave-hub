@@ -8,13 +8,13 @@ import { Download, TrendingUp, Users, Eye, MousePointer, Clock } from 'lucide-re
 import { toast } from 'sonner';
 
 const pageViewsData = [
-  { date: '01.11', views: 4200, unique: 3100, bounce: 45 },
-  { date: '02.11', views: 3800, unique: 2900, bounce: 48 },
-  { date: '03.11', views: 5100, unique: 3800, bounce: 42 },
-  { date: '04.11', views: 4600, unique: 3400, bounce: 44 },
-  { date: '05.11', views: 5400, unique: 4100, bounce: 40 },
-  { date: '06.11', views: 6200, unique: 4800, bounce: 38 },
-  { date: '07.11', views: 5800, unique: 4400, bounce: 41 },
+  { date: '01.05', views: 4200, unique: 3100, bounce: 45 },
+  { date: '08.05', views: 3800, unique: 2900, bounce: 48 },
+  { date: '15.05', views: 5100, unique: 3800, bounce: 42 },
+  { date: '22.05', views: 4600, unique: 3400, bounce: 44 },
+  { date: '29.05', views: 5400, unique: 4100, bounce: 40 },
+  { date: '05.06', views: 6200, unique: 4800, bounce: 38 },
+  { date: '12.06', views: 5800, unique: 4400, bounce: 41 },
 ];
 
 const topPagesData = [

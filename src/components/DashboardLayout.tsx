@@ -34,6 +34,7 @@ const menuItems = [
   { icon: Mail, label: 'Email-кампанії', path: '/campaigns' },
   { icon: Share2, label: 'Соцмережі', path: '/social' },
   { icon: FileText, label: 'Звіти', path: '/reports' },
+  { icon: Brain, label: 'Сегменти', path: '/segments' },
   { icon: Settings, label: 'Налаштування', path: '/settings' },
 ];
 

@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Users, TrendingUp, UserPlus, Target, ArrowUp, ArrowDown } from 'lucide-react';
+import { RecommendationsCard } from '@/components/RecommendationsCard';
 
 const trafficData = [
   { date: '1', current: 2400, previous: 2100 },
@@ -147,6 +148,9 @@ const Dashboard = () => {
           </ResponsiveContainer>
         </CardContent>
       </Card>
+
+      {/* AI Recommendations */}
+      <RecommendationsCard />
 
       {/* Source & Conversion Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
