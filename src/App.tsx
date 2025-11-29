@@ -15,6 +15,7 @@ import Leads from "./pages/Leads";
 import Campaigns from "./pages/Campaigns";
 import Social from "./pages/Social";
 import Reports from "./pages/Reports";
+import Segments from "./pages/Segments";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -94,6 +95,17 @@ const App = () => (
                 <ProtectedRoute>
                   <DashboardLayout>
                     <Reports />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            
+            <Route
+              path="/segments"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Segments />
                   </DashboardLayout>
                 </ProtectedRoute>
               }

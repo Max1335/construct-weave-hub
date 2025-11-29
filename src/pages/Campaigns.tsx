@@ -26,7 +26,7 @@ const initialCampaigns = [
     sent: 12458,
     opened: 8932,
     clicked: 3421,
-    date: '05.11.2024',
+    date: '05.05.2025',
     subject: '🔥 Знижка 30% на всі послуги',
   },
   {
@@ -36,7 +36,7 @@ const initialCampaigns = [
     sent: 0,
     opened: 0,
     clicked: 0,
-    date: '10.11.2024',
+    date: '10.06.2025',
     subject: 'Ознайомтесь з нашими новинками',
   },
   {
@@ -46,7 +46,7 @@ const initialCampaigns = [
     sent: 8745,
     opened: 6234,
     clicked: 2156,
-    date: '28.10.2024',
+    date: '28.04.2025',
     subject: 'Восени кращі пропозиції для вас',
   },
   {
@@ -56,7 +56,7 @@ const initialCampaigns = [
     sent: 3421,
     opened: 2987,
     clicked: 1543,
-    date: '01.11.2024',
+    date: '01.05.2025',
     subject: 'Ласкаво просимо! 🎉',
   },
 ];
